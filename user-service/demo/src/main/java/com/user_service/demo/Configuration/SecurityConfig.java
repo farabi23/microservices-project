@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // ✅ Updated for Spring Security 6
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Public endpoints
+                        .requestMatchers("/auth/**").permitAll() // Public endpoints
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
