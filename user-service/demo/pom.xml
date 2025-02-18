@@ -76,7 +76,13 @@
 				<artifactId>jjwt-impl</artifactId>
 				<version>0.11.5</version>
 			</dependency>
-			<!-- JJWT Jackson (runtime) -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- JJWT Jackson (runtime) -->
 			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-jackson</artifactId>

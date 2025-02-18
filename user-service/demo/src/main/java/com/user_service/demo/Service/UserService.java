@@ -4,6 +4,7 @@ package com.user_service.demo.Service;
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Cacheable(cacheNames = "users", key = "#username")
     public User getUserByUsername(String username) {
        return userRepository.findByUsername(username).orElse(null);
     }
