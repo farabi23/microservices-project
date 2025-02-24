@@ -1,6 +1,5 @@
 package com.user_service.demo.Service;
 
-
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +16,29 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void saveUser(User user) {
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
+
+    public User saveUser(User user) {
+        //  Encode password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+
+        //  Save user in DB
+        User savedUser = userRepository.save(user);
+
+        //  Publish event to Kafka
+        kafkaProducerService.sendMessage("User Created: " + savedUser.getUsername());
+
+        return savedUser;
     }
 
     @Cacheable(cacheNames = "users", key = "#username")
     public User getUserByUsername(String username) {
-       return userRepository.findByUsername(username).orElse(null);
+        return userRepository.findByUsername(username).orElse(null);
     }
 
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+        kafkaProducerService.sendMessage("User Deleted: " + id);
+    }
 }
