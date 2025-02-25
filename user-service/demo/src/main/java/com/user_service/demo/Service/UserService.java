@@ -1,5 +1,6 @@
 package com.user_service.demo.Service;
 
+import com.user_service.demo.Dto.NotificationDTO;
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,11 @@ public class UserService {
         //  Save user in DB
         User savedUser = userRepository.save(user);
 
+        // notification dto
+        NotificationDTO notificationDTO = new NotificationDTO(savedUser.getId(), "User created: " + savedUser.getUsername());
+
         //  Publish event to Kafka
-        kafkaProducerService.sendMessage("User Created: " + savedUser.getUsername());
+        kafkaProducerService.sendMessage(notificationDTO);
 
         return savedUser;
     }
@@ -39,6 +43,9 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
-        kafkaProducerService.sendMessage("User Deleted: " + id);
+
+        NotificationDTO notificationDTO = new NotificationDTO(id, "User deleted: " + id);
+
+        kafkaProducerService.sendMessage(notificationDTO);
     }
 }
