@@ -5,10 +5,7 @@ import com.example.notification_service.Entity.Notification;
 import com.example.notification_service.Service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,9 +24,28 @@ public class NotificationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Notification> getNotificationById(@PathVariable Long id) {
-        Notification notification = notificationService.getNotificationById(id);
-        return ResponseEntity.ok(notification);
+
+        return ResponseEntity.ok(notificationService.getNotificationById(id));
     }
+
+    @PutMapping("/{id}/mark-as-read")
+    public ResponseEntity<String> markNotificationAsRead(@PathVariable Long id) {
+        notificationService.markNotificationAsRead(id);
+        return ResponseEntity.ok("Notification marked as read!");
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteNotification(@PathVariable Long id) {
+        notificationService.deleteNotification(id);
+        return ResponseEntity.ok("Notification deleted!");
+    }
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<String> deleteUserNotifications(@PathVariable Long userId) {
+        notificationService.deleteAllNotificationsByUserId(userId);
+        return ResponseEntity.ok("All notifications deleted for user: " + userId);
+    }
+
 
 
 

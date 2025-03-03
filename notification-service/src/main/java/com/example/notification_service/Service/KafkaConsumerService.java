@@ -2,6 +2,7 @@ package com.example.notification_service.Service;
 
 import com.example.notification_service.DTO.NotificationDTO;
 import com.example.notification_service.Entity.Notification;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.KafkaListeners;
@@ -13,20 +14,28 @@ import java.time.LocalDateTime;
 public class KafkaConsumerService {
 
     @Autowired
-    private NotificationSaveService notificationSaveService;
+    private NotificationService notificationSaveService;
 
-    @KafkaListener(topics="user-events", groupId = "notification-group")
-    public void listen(NotificationDTO notificationDTO) {
+    @Autowired
+    private ObjectMapper objectMapper;
 
-        Notification notification = new Notification();
-        notification.setUserId(notificationDTO.getUserId());
-        notification.setMessage(notificationDTO.getMessage());
-        notification.setRead(false);
-        notification.setTimestamp(LocalDateTime.now());
-        //System.out.println("NotificationService received: "+ message);
-        notificationSaveService.saveNotification(notification);
+    @KafkaListener(topics = "user-events", groupId = "notification-group")
+    public void listen(String rawMessage) {
+        try {
+            NotificationDTO notificationDTO = objectMapper.readValue(rawMessage, NotificationDTO.class);
 
-        // send email, push notification, etc.
+            Notification notification = new Notification();
+            notification.setUserId(notificationDTO.getUserId());
+            notification.setMessage(notificationDTO.getMessage());
+            notification.setRead(false);
+            notification.setTimestamp(java.time.LocalDateTime.now());
+
+            notificationSaveService.saveNotification(notification);
+            System.out.println("Notification received");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

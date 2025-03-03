@@ -1,5 +1,7 @@
 package com.user_service.demo.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.user_service.demo.Dto.NotificationDTO;
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Repository.UserRepository;
@@ -19,8 +21,10 @@ public class UserService {
 
     @Autowired
     private KafkaProducerService kafkaProducerService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    public User saveUser(User user) {
+    public User saveUser(User user) throws JsonProcessingException {
         //  Encode password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

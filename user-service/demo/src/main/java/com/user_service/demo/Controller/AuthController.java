@@ -1,6 +1,7 @@
 package com.user_service.demo.Controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.user_service.demo.Dto.AuthRequest;
 import com.user_service.demo.Dto.AuthResponse;
 import com.user_service.demo.Entity.Role;
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public String register(@RequestBody User user) throws JsonProcessingException {
         if (user.getRole() == null) {  // Ensure the role is not null
             user.setRole(Role.USER);  // Set a default role
         }
