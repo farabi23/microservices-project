@@ -5,7 +5,7 @@ public class NotificationDTO {
     private String message;
     private String username;
 
-    public NotificationDTO(Long userId, String message, String username) {
+    public NotificationDTO(Long userId, String username, String message) {
 
         this.userId = userId;
         this.username = username;

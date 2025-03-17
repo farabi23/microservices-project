@@ -29,11 +29,12 @@ public class Notification {
 
     public Notification() {}
 
-    public Notification(Long id, Long userId, String message, String username, LocalDateTime timestamp, boolean isRead) {
+    public Notification(Long id, Long userId, String username, String message,  LocalDateTime timestamp, boolean isRead) {
         this.id = id;
         this.userId = userId;
-        this.message = message;
         this.username = username;
+        this.message = message;
+
         this.timestamp = timestamp;
         this.isRead = isRead;
 
