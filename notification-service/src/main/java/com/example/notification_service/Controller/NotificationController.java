@@ -3,6 +3,7 @@ package com.example.notification_service.Controller;
 
 import com.example.notification_service.Entity.Notification;
 import com.example.notification_service.Service.NotificationService;
+import com.example.notification_service.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     private NotificationService notificationService;
