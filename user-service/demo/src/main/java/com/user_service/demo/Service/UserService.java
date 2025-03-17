@@ -32,7 +32,8 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         // notification dto
-        NotificationDTO notificationDTO = new NotificationDTO(savedUser.getId(), "User created: " + savedUser.getUsername());
+        NotificationDTO notificationDTO = new NotificationDTO(savedUser.getId(), savedUser.getUsername(),
+                "User created: " + savedUser.getUsername());
 
         //  Publish event to Kafka
         kafkaProducerService.sendMessage(notificationDTO);
@@ -48,7 +49,10 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
 
-        NotificationDTO notificationDTO = new NotificationDTO(id, "User deleted: " + id);
+        User user = userRepository.findById(id).orElse(null);
+
+        NotificationDTO notificationDTO = new NotificationDTO(id, user.getUsername(),
+                "User deleted: " + id);
 
         kafkaProducerService.sendMessage(notificationDTO);
     }

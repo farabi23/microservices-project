@@ -15,6 +15,9 @@ public class Notification {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "username")  //
+    private String username;
+
     @Column(name = "message")
     private String message;
 
@@ -26,13 +29,22 @@ public class Notification {
 
     public Notification() {}
 
-    public Notification(Long id, Long userId, String message, LocalDateTime timestamp, boolean isRead) {
+    public Notification(Long id, Long userId, String message, String username, LocalDateTime timestamp, boolean isRead) {
         this.id = id;
         this.userId = userId;
         this.message = message;
+        this.username = username;
         this.timestamp = timestamp;
         this.isRead = isRead;
 
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {

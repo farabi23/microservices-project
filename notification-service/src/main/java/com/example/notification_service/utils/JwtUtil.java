@@ -1,5 +1,6 @@
 package com.example.notification_service.utils;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -13,6 +14,9 @@ import java.security.Key;
 @Component
 public class JwtUtil {
 
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String extractUsername(String token) {
@@ -21,7 +25,7 @@ public class JwtUtil {
 
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(SECRET_KEY)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

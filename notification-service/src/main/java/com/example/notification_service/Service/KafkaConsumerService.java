@@ -26,6 +26,7 @@ public class KafkaConsumerService {
 
             Notification notification = new Notification();
             notification.setUserId(notificationDTO.getUserId());
+            notification.setUsername(notificationDTO.getUsername());
             notification.setMessage(notificationDTO.getMessage());
             notification.setRead(false);
             notification.setTimestamp(java.time.LocalDateTime.now());

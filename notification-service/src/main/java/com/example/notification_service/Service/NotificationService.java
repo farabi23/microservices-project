@@ -10,8 +10,11 @@ import java.util.List;
 @Service
 public class NotificationService {
 
-    @Autowired
-    private NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
+
+    public NotificationService(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
 
     public void saveNotification(Notification notification) {
         notificationRepository.save(notification);
@@ -20,6 +23,10 @@ public class NotificationService {
     public List<Notification> getNotificationsByUserId(Long userId) {
         return notificationRepository.findByUserId(userId);
 
+    }
+
+    public List<Notification> getNotificationsByUserName(String userName) {
+        return notificationRepository.findByUsername(userName);
     }
 
     public Notification getNotificationById(Long id) {
@@ -44,5 +51,8 @@ public class NotificationService {
         notificationRepository.deleteByUserId(userId);
 
 
+    }
+    public void deleteAllNotificationsByUserName(String userName) {
+        notificationRepository.deleteAllByUsername(userName);
     }
 }
