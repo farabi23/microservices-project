@@ -8,7 +8,10 @@ import com.user_service.demo.Entity.Role;
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Service.UserService;
 import com.user_service.demo.Utils.JwtUtil;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,11 +43,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody User user) throws JsonProcessingException {
-        if (user.getRole() == null) {  // Ensure the role is not null
-            user.setRole(Role.USER);  // Set a default role
-        }
-        userService.saveUser(user);
-        return "User registered successfully!";
+            if (user.getRole() == null) {
+                user.setRole(Role.USER);
+            }
+            userService.saveUser(user);
+
+            return ("User registered successfully");
+
     }
 
 
