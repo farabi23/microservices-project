@@ -2,6 +2,7 @@ package com.example.product_service.service;
 
 import com.example.product_service.entity.Category;
 import com.example.product_service.entity.Product;
+import com.example.product_service.repository.CategoryRepository;
 import com.example.product_service.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,12 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+
     }
 
     public List<Product> getAllProducts() {
@@ -36,6 +40,13 @@ public class ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
+
+    public List<Product> getProductsByCategory(String categoryName) {
+        return productRepository.findByCategory_Name(categoryName);
+    }
+
+
+
 
 
 

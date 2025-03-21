@@ -1,6 +1,6 @@
 package com.example.product_service.controller;
 
-
+import com.example.product_service.entity.Category;
 import com.example.product_service.entity.Product;
 import com.example.product_service.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +45,11 @@ public class ProductController {
     public String deleteProductById(@PathVariable Long id) {
         productService.deleteProduct(id);
         return "Successfully deleted a product!";
+    }
+
+    @GetMapping("/category/{categoryName}")
+    public List<Product> getProductsByCategory(@PathVariable String categoryName) {
+        return productService.getProductsByCategory(categoryName);
     }
 
 
