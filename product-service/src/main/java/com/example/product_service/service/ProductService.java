@@ -29,15 +29,14 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void updateProduct(Product product) {
-        productRepository.save(product);
+    public Product updateProduct(Product product) {
+        return productRepository.save(product);
     }
+
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
 
-    public List<Product> getProductsByCategory(Category category) {
-        return productRepository.findProductsByCategoryByCategory(category);
-    }
+
 
 }
