@@ -1,5 +1,6 @@
 package com.order_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.order_service.Enum.OrderStatus;
 import jakarta.persistence.*;
 
@@ -25,6 +26,7 @@ public class Order {
     private BigDecimal totalAmount;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<OrderItem> orderItems;
 
     public Order() {}

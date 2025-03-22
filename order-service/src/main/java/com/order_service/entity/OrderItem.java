@@ -1,5 +1,6 @@
 package com.order_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name="order_id")
+    @JsonBackReference
     private Order order;
 
     public OrderItem() {}
