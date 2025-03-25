@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/login", "/auth/register").permitAll()
+                        auth.requestMatchers("/auth/login", "/auth/register", "/test/allusers").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
