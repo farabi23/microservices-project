@@ -13,10 +13,10 @@ RUN mvn clean package -DskipTests
 FROM openjdk:23-jdk as runner
 WORKDIR /app
 
-COPY --from=builder /app/target/demo-0.0.1-SNAPSHOT.jar ./app.jar
+COPY --from=builder /app/target/notification-service-0.0.1-SNAPSHOT.jar ./app.jar
 
-EXPOSE 8081
+EXPOSE 8082
 
-ENV EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+#ENV EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
