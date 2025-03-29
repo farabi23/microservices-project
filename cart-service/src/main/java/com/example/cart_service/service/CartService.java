@@ -6,6 +6,9 @@ import com.example.cart_service.entity.CartItem;
 import com.example.cart_service.repository.CartRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 @Service
 public class CartService {
 
@@ -19,29 +22,30 @@ public class CartService {
     }
 
 
-    public Cart createCartForUser(Long userId){
-        Cart newCart = new Cart();
-        return cartRepository.save(newCart);
-    }
+    public Cart addItemToCart(Long userId, CartItemDTO itemDTO){
+        Cart cart = cartRepository.getCartByUserId(userId);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUserId(userId);
+            cart.setItems(new ArrayList<>());
+        }
 
-    public Cart updateCart(Cart cart) {
+        // Create a new cart item using data from the DTO
+        CartItem newItem = new CartItem();
+        newItem.setProductName(itemDTO.getProductName());
+        newItem.setQuantity(itemDTO.getQuantity());
+        newItem.setUnitPrice(itemDTO.getUnitPrice());
+        newItem.setCart(cart);
+        // Optionally, if you have a field for item total
+        BigDecimal itemTotal = itemDTO.getUnitPrice().multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
+
+
+        // Add the new item to the cart
+        cart.getItems().add(newItem);
+
+
+        // Persist and return the updated cart.
         return cartRepository.save(cart);
-    }
-    public void deleteCart(Long id) {
-        cartRepository.deleteById(id);
-    }
-
-    public Cart addItemToCart(Long userId, CartItemDTO cartItemDTO){
-        Cart cart = getCartForUser(userId);
-        // adding cartItem to cart using dto
-        CartItem item = new CartItem();
-        item.setProductId(cartItemDTO.getProductId());
-        item.setProductName(cartItemDTO.getProductName());
-        item.setQuantity(cartItemDTO.getQuantity());
-        item.setUnitPrice(cartItemDTO.getUnitPrice());
-        item.setCart(cart);
-        cart.getItems().add(item);
-        return cart;
     }
 
     public Cart updateItemInCart(Long userId, Long itemId, CartItemDTO cartItemDTO){

@@ -41,7 +41,7 @@ public class CartController {
     }
 
 
-    @DeleteMapping("/user/{userId}/item/{itemId}")
+    @DeleteMapping("/user/{userId}/items/{itemId}")
     public ResponseEntity<Cart> deleteItemFromCart(
             @PathVariable Long userId, @PathVariable Long itemId
     ){
@@ -49,7 +49,7 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @DeleteMapping("/user/{userId}/item/{itemId}")
+    @DeleteMapping("/user/{userId}")
     public ResponseEntity<Cart> clearCart(
             @PathVariable Long userId
     ){
