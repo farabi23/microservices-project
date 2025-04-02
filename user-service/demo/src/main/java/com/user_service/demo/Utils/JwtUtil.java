@@ -18,7 +18,11 @@ public class JwtUtil {
     // Generate a secure key for HS256
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Long userId) {
+
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
+
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())

@@ -6,6 +6,7 @@ import com.user_service.demo.Dto.AuthRequest;
 import com.user_service.demo.Dto.AuthResponse;
 import com.user_service.demo.Entity.Role;
 import com.user_service.demo.Entity.User;
+import com.user_service.demo.Repository.UserRepository;
 import com.user_service.demo.Service.UserService;
 import com.user_service.demo.Utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,6 +30,8 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
@@ -37,8 +40,11 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(), request.getPassword()));
 
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(()
+                -> new EntityNotFoundException("User not found"));
 
-        String token = jwtUtil.generateToken(request.getUsername());
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getId());
         return new AuthResponse(token);
     }
 
