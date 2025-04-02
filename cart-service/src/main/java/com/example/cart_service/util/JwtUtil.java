@@ -21,6 +21,10 @@ public class JwtUtil {
         return extractClaims(token).getSubject();
     }
 
+    public Long extractUserId(String token) {
+        return extractClaims(token).get("userId", Long.class);
+    }
+
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)

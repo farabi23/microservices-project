@@ -17,18 +17,20 @@ public class CartService {
         this.cartRepository = cartRepository;
     }
 
-    public Cart getCartForUser(Long userId) {
-        return cartRepository.getCartByUserId(userId);
-    }
-
-
-    public Cart addItemToCart(Long userId, CartItemDTO itemDTO){
+    public Cart getOrCreateCartForUser(Long userId) {
         Cart cart = cartRepository.getCartByUserId(userId);
         if (cart == null) {
             cart = new Cart();
             cart.setUserId(userId);
             cart.setItems(new ArrayList<>());
+            cart = cartRepository.save(cart); // persist right away
         }
+        return cart;
+    }
+
+
+    public Cart addItemToCart(Long userId, CartItemDTO itemDTO){
+        Cart cart = getOrCreateCartForUser(userId);
 
         // Create a new cart item using data from the DTO
         CartItem newItem = new CartItem();
@@ -39,18 +41,15 @@ public class CartService {
         // Optionally, if you have a field for item total
         BigDecimal itemTotal = itemDTO.getUnitPrice().multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
 
-
         // Add the new item to the cart
         cart.getItems().add(newItem);
-
-
-        // Persist and return the updated cart.
+        System.out.println("Saving cart with userId: " + cart.getUserId());
         return cartRepository.save(cart);
     }
 
     public Cart updateItemInCart(Long userId, Long itemId, CartItemDTO cartItemDTO){
 
-        Cart cart = getCartForUser(userId);
+        Cart cart = getOrCreateCartForUser(userId);
         for(CartItem cartItem : cart.getItems()){
             if(cartItem.getId().equals(itemId)){
                 cartItem.setQuantity(cartItemDTO.getQuantity());
@@ -64,14 +63,14 @@ public class CartService {
     }
 
     public Cart removeItemFromCart(Long userId, Long itemId){
-        Cart cart = getCartForUser(userId);
+        Cart cart = getOrCreateCartForUser(userId);
 
         cart.getItems().removeIf(cartItem -> cartItem.getId().equals(itemId));
         return cartRepository.save(cart);
     }
 
     public void clearCart(Long userId) {
-        Cart cart = getCartForUser(userId);
+        Cart cart = getOrCreateCartForUser(userId);
         cart.getItems().clear();
         cartRepository.save(cart);
     }

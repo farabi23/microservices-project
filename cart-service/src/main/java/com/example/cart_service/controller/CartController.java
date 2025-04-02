@@ -3,6 +3,7 @@ package com.example.cart_service.controller;
 import com.example.cart_service.dto.CartItemDTO;
 import com.example.cart_service.entity.Cart;
 import com.example.cart_service.service.CartService;
+import com.example.cart_service.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,51 +12,70 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    private final JwtUtil jwtUtil;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, JwtUtil jwtUtil) {
         this.cartService = cartService;
+        this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<Cart> getCart(@PathVariable Long userId) {
-        Cart cart = cartService.getCartForUser(userId);
+    @GetMapping("/user")
+    public ResponseEntity<Cart> getCart(@RequestHeader("Authorization") String token) {
+
+        Long userId = jwtUtil.extractUserId(token.substring(7));
+
+        Cart cart = cartService.getOrCreateCartForUser(userId);
         return ResponseEntity.ok(cart);
     }
 
-    @PostMapping("/user/{userId}/items")
+    @PostMapping("/user/items")
     public ResponseEntity<Cart> addItemToCart(
-            @PathVariable Long userId,
+            @RequestHeader("Authorization") String token,
             @RequestBody CartItemDTO itemDTO
-            ){
+    ){
+        System.out.println(">>> Request reached controller !");
+        Long userId = jwtUtil.extractUserId(token.substring(7));
         Cart cart = cartService.addItemToCart(userId, itemDTO);
         return ResponseEntity.ok(cart);
     }
 
     //Update the item in cart
-    @PostMapping("/user/{userId}/items/{itemId}")
+    @PostMapping("/user/items/{itemId}")
     public ResponseEntity<Cart> updateItemInCart(
-            @PathVariable Long userId, @RequestBody CartItemDTO itemDTO, @PathVariable Long itemId
+            @RequestHeader("Authorization") String token, @RequestBody CartItemDTO itemDTO, @PathVariable Long itemId
     ){
+        Long userId = jwtUtil.extractUserId(token.substring(7));
         Cart updatedCart = cartService.updateItemInCart(userId, itemId, itemDTO);
         return ResponseEntity.ok(updatedCart);
     }
 
 
-    @DeleteMapping("/user/{userId}/items/{itemId}")
+    @DeleteMapping("/user/items/{itemId}")
     public ResponseEntity<Cart> deleteItemFromCart(
-            @PathVariable Long userId, @PathVariable Long itemId
+            @RequestHeader("Authorization") String token, @PathVariable Long itemId
     ){
+        Long userId = jwtUtil.extractUserId(token.substring(7));
         Cart cart = cartService.removeItemFromCart(userId, itemId);
         return ResponseEntity.ok(cart);
     }
 
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/user")
     public ResponseEntity<Cart> clearCart(
-            @PathVariable Long userId
+            @RequestHeader("Authorization") String token
     ){
+        Long userId = jwtUtil.extractUserId(token.substring(7));
+
         cartService.clearCart(userId);
         return ResponseEntity.noContent().build();
 
     }
+
+
+    @PostMapping("/test")
+    public String test(@RequestBody String body) {
+        System.out.println(">>>>> TEST POST REACHED ✅");
+        return "Test POST successful";
+    }
+
 
 }

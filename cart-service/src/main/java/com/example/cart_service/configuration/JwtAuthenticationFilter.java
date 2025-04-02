@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        if(authHeader == null || !authHeader.startsWith("Bearer")){
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
         }
@@ -36,11 +36,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             username = jwtUtil.extractUsername(jwt);
         }
         catch(Exception e){
+            System.out.println(">>> JWT PARSE FAILED: " + e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
 
         if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+            System.out.println(">>> JWT VALID, SETTING AUTH FOR USER: " + username);
+
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
 
@@ -49,6 +52,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         }
+        else{
+            System.out.println(">>> JWT INVALID OR AUTH ALREADY SET");
+        }
+
         filterChain.doFilter(request, response);
     }
 }
