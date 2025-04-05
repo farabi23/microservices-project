@@ -38,13 +38,12 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(), request.getPassword()));
+                        request.getEmail(), request.getPassword()));
 
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(()
-                -> new EntityNotFoundException("User not found"));
+        User user = userService.getUserByEmail(request.getEmail());
 
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getId());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId());
         return new AuthResponse(token);
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.user_service.demo.Dto.NotificationDTO;
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +44,14 @@ public class UserService {
 
     @Cacheable(cacheNames = "users", key = "#username")
     public User getUserByUsername(String username) {
+
         return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new EntityNotFoundException("User with email " + email + " not found")
+        );
     }
 
     public void deleteUser(Long id) {
