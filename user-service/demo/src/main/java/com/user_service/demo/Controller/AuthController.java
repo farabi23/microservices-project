@@ -4,14 +4,13 @@ package com.user_service.demo.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.user_service.demo.Dto.AuthRequest;
 import com.user_service.demo.Dto.AuthResponse;
+import com.user_service.demo.Dto.RegisterRequest;
 import com.user_service.demo.Entity.Role;
 import com.user_service.demo.Entity.User;
 import com.user_service.demo.Repository.UserRepository;
 import com.user_service.demo.Service.UserService;
 import com.user_service.demo.Utils.JwtUtil;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,13 +47,24 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) throws JsonProcessingException {
-            if (user.getRole() == null) {
-                user.setRole(Role.USER);
-            }
-            userService.saveUser(user);
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) throws JsonProcessingException {
 
-            return ("User registered successfully");
+        if(userRepository.existsByEmail(registerRequest.getEmail())) {
+            return ResponseEntity.badRequest().body("User with this email already exists!");
+
+        }
+        if(userRepository.existsByUsername(registerRequest.getUsername())) {
+            return ResponseEntity.badRequest().body("User with this username already exists!");
+        }
+        User user = new User();
+        user.setEmail(registerRequest.getEmail());
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(registerRequest.getPassword());
+        user.setRole(Role.USER);
+
+        userService.saveUser(user);
+
+            return ResponseEntity.ok("User registered successfully!");
 
     }
 
