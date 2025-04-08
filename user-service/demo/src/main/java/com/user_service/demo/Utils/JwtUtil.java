@@ -18,14 +18,17 @@ public class JwtUtil {
     // Generate a secure key for HS256
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String email, Long userId) {
+    public String generateToken(String email, Long userId, String username) {
 
         Claims claims = Jwts.claims().setSubject(email);
+
         claims.put("userId", userId);
+        claims.put("username", username);
 
         return Jwts.builder()
                 .setSubject(email)
                 .claim("userId", userId)
+                .claim("username", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
