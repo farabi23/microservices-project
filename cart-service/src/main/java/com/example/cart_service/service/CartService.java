@@ -18,7 +18,7 @@ public class CartService {
     }
 
     public Cart getOrCreateCartForUser(Long userId) {
-        Cart cart = cartRepository.getCartByUserId(userId);
+        Cart cart = cartRepository.findFirstByUserId(userId);;
         if (cart == null) {
             cart = new Cart();
             cart.setUserId(userId);

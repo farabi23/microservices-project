@@ -11,7 +11,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -21,41 +20,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         final String jwt = authHeader.substring(7);
-        String username = null;
+        String username;
 
-        try{
+        try {
             username = jwtUtil.extractUsername(jwt);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(">>> JWT PARSE FAILED: " + e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
 
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             System.out.println(">>> JWT VALID, SETTING AUTH FOR USER: " + username);
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
-
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
         }
-        else{
-            System.out.println(">>> JWT INVALID OR AUTH ALREADY SET");
-        }
-
         filterChain.doFilter(request, response);
     }
 }

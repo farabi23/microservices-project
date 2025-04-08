@@ -17,9 +17,80 @@
         <br>
         <strong th:text="${product.getPrice()}"></strong>
         <span th:text="${product.getCategory().getName()}"></span>
-        <a href="">Add product</a>
+
+        <form >
+            <input type="hidden" name="productId" th:value="${product.getId()}">
+            <input type="hidden" name="productName" th:value="${product.getName()}">
+            <input type="hidden" name="unitPrice" th:value="${product.getPrice()}">
+            <input type="number" name="quantity" value="1" min="1" style="width: 50px;">
+            <button onclick="addToCart(this)"
+                    th:data-name="${product.getName()}"
+                    th:data-price="${product.getPrice()}"
+                    class="add-to-cart"
+                    type="button">Add to Cart</button>
+        </form>
     </li>
 </ul>
+
+<script>
+    function addToCart(button) {
+        // Use the form inputs (or the data attributes) to get your product info
+        const form = button.closest('form');
+        const productName = form.querySelector('input[name="productName"]').value;
+        const unitPrice = form.querySelector('input[name="unitPrice"]').value;
+        const quantity = form.querySelector('input[name="quantity"]').value;
+
+        var jwtToken = /*[[${jwtToken}]]*/ '';
+
+        // Build the item DTO to send
+        const itemDTO = {
+            productName: productName,
+            unitPrice: unitPrice,
+            quantity: parseInt(quantity)
+        };
+
+        // Make the fetch call – adjust the URL if needed.
+        fetch(`/cart/add?productName=${encodeURIComponent(productName)}&unitPrice=${encodeURIComponent(unitPrice)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // You might need to include the Authorization header:
+                'Authorization': 'Bearer ' + jwtToken/* get your JWT token from session storage or elsewhere */
+            },
+            body: JSON.stringify(itemDTO)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not OK');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update the counter on the navbar immediately
+                const totalItems = data.items.reduce((sum, item) => sum + item.quantity, 0);
+                const counter = document.getElementById('cart-counter');
+                if (counter) {
+                    counter.textContent = totalItems;
+                    counter.classList.add('animate-bounce');
+                    setTimeout(() => counter.classList.remove('animate-bounce'), 500);
+                }
+            })
+            .catch(error => {
+                console.error("Error adding item to cart:", error);
+            });
+    }
+</script>
+
+<style>
+    .animate-bounce {
+        animation: bounce 0.5s;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 </html>

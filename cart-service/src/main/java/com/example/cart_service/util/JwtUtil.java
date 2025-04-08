@@ -15,11 +15,14 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
+
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+
     public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
+        return extractClaims(token).get("username", String.class);
     }
+
 
     public Long extractUserId(String token) {
         return extractClaims(token).get("userId", Long.class);
@@ -32,5 +35,4 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 }

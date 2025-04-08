@@ -11,6 +11,12 @@ public class ControllerAdvice {
     public void addAttributes(Model model, HttpServletRequest request) {
         String username = (String) request.getSession().getAttribute("username");
 
+        Object token = request.getSession().getAttribute("JWT_TOKEN");
+
+        if(token != null) {
+            model.addAttribute("jwtToken", token);
+        }
+
         if(username != null) {
             model.addAttribute("username", username);
         }

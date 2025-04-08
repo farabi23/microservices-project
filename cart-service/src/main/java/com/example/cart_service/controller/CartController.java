@@ -35,7 +35,11 @@ public class CartController {
     ){
         System.out.println(">>> Request reached controller !");
         Long userId = jwtUtil.extractUserId(token.substring(7));
-        Cart cart = cartService.addItemToCart(userId, itemDTO);
+
+        Cart cart = cartService.getOrCreateCartForUser(userId);
+        cart = cartService.addItemToCart(userId, itemDTO);
+
+        //Cart cart = cartService.addItemToCart(userId, itemDTO);
         return ResponseEntity.ok(cart);
     }
 
