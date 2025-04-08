@@ -1,8 +1,11 @@
 package com.front_end.front_end.MainPage;
 
 import com.front_end.front_end.dto.RegisterRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,10 +41,12 @@ public class SignUpController {
             redirectAttributes.addFlashAttribute("error", "Passwords do not match!");
             return "redirect:/auth/register";
         }
+
+
         RegisterRequest request = new RegisterRequest();
         request.setEmail(email);
         request.setUsername(username);
-        request.setEmail(password);
+        request.setPassword(password);
 
         try {
             String response = webClient.post()
@@ -58,9 +63,12 @@ public class SignUpController {
             return "redirect:/auth/register";
         }
 
-
-
-        return "redirect:/";
     }
+
+    @GetMapping("/auth/success")
+    public String success() {
+        return "success";
+    }
+
 
 }

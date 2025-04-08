@@ -1,5 +1,7 @@
 package com.front_end.front_end.dto;
 
+import jakarta.validation.constraints.Email;
+
 public class RegisterRequest {
 
     private String email;

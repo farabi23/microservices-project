@@ -49,6 +49,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) throws JsonProcessingException {
 
+        System.out.println("Register request: {} " + registerRequest);
+
         if(userRepository.existsByEmail(registerRequest.getEmail())) {
             return ResponseEntity.badRequest().body("User with this email already exists!");
 

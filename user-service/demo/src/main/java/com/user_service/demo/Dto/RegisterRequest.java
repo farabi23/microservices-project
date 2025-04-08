@@ -1,5 +1,8 @@
 package com.user_service.demo.Dto;
 
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Email;
+
 public class RegisterRequest {
 
 
