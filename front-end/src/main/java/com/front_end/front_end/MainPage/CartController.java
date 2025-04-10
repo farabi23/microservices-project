@@ -92,6 +92,25 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    @PostMapping("/cart/clear")
+    public String clearCart(Model model, HttpServletRequest request) {
+        String token = (String) request.getSession().getAttribute("JWT_TOKEN");
+        model.addAttribute("jwtToken", token);
+
+        webClient
+                .delete()
+                .uri("/cart/user")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+
+
+        request.getSession().setAttribute("cartCount", 0);
+
+        return "redirect:/cart";
+    }
+
 
 
 

@@ -30,7 +30,12 @@
     <p th:text="${cart.getTotalPrice()}"></p>
 </div>
 
+<div>
+    <form th:action="@{/cart/clear}" method="post">
+        <button type="submit" class="text-red-500 hover:text-red-700">Clear cart</button>
+    </form>
 
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
