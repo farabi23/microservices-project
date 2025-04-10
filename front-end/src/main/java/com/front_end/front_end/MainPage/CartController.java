@@ -82,11 +82,16 @@ public class CartController {
                 .block();
 
         model.addAttribute("cart", updatedCart);
-        model.addAttribute("cartCount", updatedCart.getItems().stream()
-                .mapToInt(CartItem::getQuantity).sum());
 
-        return "redirect:/cart"; // or redirect to /cart
+        // ✅ Persist the count into session for navbar to use
+        int totalItems = updatedCart.getItems().stream()
+                .mapToInt(CartItem::getQuantity)
+                .sum();
+        request.getSession().setAttribute("cartCount", totalItems);
+
+        return "redirect:/cart";
     }
+
 
 
 
