@@ -1,7 +1,5 @@
 package com.front_end.front_end.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.math.BigDecimal;
 
 public class CartItem {
@@ -19,6 +17,11 @@ public class CartItem {
 
     private Cart cart;
 
+    public CartItem(String productName, int quantity, BigDecimal unitPrice) {
+        this.productName = productName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
     public CartItem() {}
 
     public CartItem(Long id, Long productId, String productName, int quantity, BigDecimal unitPrice, Cart cart) {

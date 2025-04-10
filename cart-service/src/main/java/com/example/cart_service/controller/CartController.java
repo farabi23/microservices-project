@@ -2,10 +2,12 @@ package com.example.cart_service.controller;
 
 import com.example.cart_service.dto.CartItemDTO;
 import com.example.cart_service.entity.Cart;
+import com.example.cart_service.entity.CartItem;
 import com.example.cart_service.service.CartService;
 import com.example.cart_service.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/cart")
@@ -46,7 +48,8 @@ public class CartController {
     //Update the item in cart
     @PostMapping("/user/items/{itemId}")
     public ResponseEntity<Cart> updateItemInCart(
-            @RequestHeader("Authorization") String token, @RequestBody CartItemDTO itemDTO, @PathVariable Long itemId
+            @RequestHeader("Authorization") String token,
+            @RequestBody CartItemDTO itemDTO, @PathVariable Long itemId
     ){
         Long userId = jwtUtil.extractUserId(token.substring(7));
         Cart updatedCart = cartService.updateItemInCart(userId, itemId, itemDTO);
@@ -58,8 +61,15 @@ public class CartController {
     public ResponseEntity<Cart> deleteItemFromCart(
             @RequestHeader("Authorization") String token, @PathVariable Long itemId
     ){
+        System.out.println(">>> DELETE request received for itemId: " + itemId);
+        System.out.println(">>> Full Authorization header: " + token);
+
         Long userId = jwtUtil.extractUserId(token.substring(7));
+        System.out.println(">>> Extracted userId: " + userId);
+
         Cart cart = cartService.removeItemFromCart(userId, itemId);
+
+        System.out.println(">>> Returning cart with " + cart.getItems().size() + " items");
         return ResponseEntity.ok(cart);
     }
 

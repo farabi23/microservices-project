@@ -63,9 +63,27 @@ public class CartService {
     }
 
     public Cart removeItemFromCart(Long userId, Long itemId){
+
+        System.out.println(">>> Attempting to remove itemId: " + itemId + " for userId: " + userId);
+
         Cart cart = getOrCreateCartForUser(userId);
 
+        System.out.println(">>> Cart before removal - items count: " + cart.getItems().size());
+        boolean removed = cart.getItems().removeIf(cartItem -> {
+            boolean match = cartItem.getId().equals(itemId);
+            System.out.println(">>> Checking item " + cartItem.getId() + " vs " + itemId + ": " + match);
+            return match;
+        });
+
+        System.out.println(">>> Item removed? " + removed);
+        System.out.println(">>> Cart after removal - items count: " + cart.getItems().size());
+
+
+
         cart.getItems().removeIf(cartItem -> cartItem.getId().equals(itemId));
+
+
+
         return cartRepository.save(cart);
     }
 
