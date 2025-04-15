@@ -4,6 +4,7 @@ import com.order_service.Enum.OrderStatus;
 import com.order_service.dto.OrderStatusDto;
 import com.order_service.entity.Order;
 import com.order_service.service.OrderService;
+import com.order_service.util.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,28 +14,41 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final JwtUtil jwtUtil;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, JwtUtil jwtUtil) {
+
         this.orderService = orderService;
+        this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/{id}")
-    public Order getOrder(@PathVariable Long id) {
+    @GetMapping("/manager")
+    public Order getOrder(@RequestHeader("Authorization") String token) {
+
+        Long id = jwtUtil.extractUserId(token);
+
         return orderService.getOrderById(id);
     }
 
-    @PostMapping
-    public Order createOrder(@RequestBody Order order) {
+    @PostMapping("/create")
+    public Order createOrder(@RequestHeader("Authorization") String token,
+                             @RequestBody Order order) {
+
         return orderService.createOrder(order);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Order> ordersByUserId(@PathVariable Long userId) {
+    @GetMapping("/user")
+    public List<Order> ordersByUserId(@RequestHeader("Authorization") String token) {
+
+        Long userId = jwtUtil.extractUserId(token);
+
         return orderService.orderByUserId(userId);
     }
 
     @PutMapping
-    public Order updateOrder(@RequestBody Order order) {
+    public Order updateOrder(@RequestHeader("Authorization") String token,
+            @RequestBody Order order) {
+
         return orderService.updateOrder(order);
     }
 
