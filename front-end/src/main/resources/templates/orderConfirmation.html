@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Order confirmation</title>
-
+    <title>Order Confirmation</title>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 
-<div th:if="${session.order != null}">
-    <h2>Order Placed Successfully!</h2>
-    <p>Order ID: <span th:text="${session.order.id}"></span></p>
-    <p>Total Amount: <span th:text="${session.order.totalAmount}"></span></p>
-    <p>Status: <span th:text="${session.order.status}"></span></p>
-    <!-- You can also list order items here -->
+<h2>Order Confirmation</h2>
+
+<div th:if="${recentOrder != null}">
+    <p>Order ID: <span th:text="${recentOrder.id}"></span></p>
+    <p>Order Date: <span th:text="${recentOrder.orderDateTime}"></span></p>
+    <p>Total Amount: <span th:text="${recentOrder.totalAmount}"></span></p>
+
+    <h3>Items:</h3>
+    <ul>
+        <li th:each="item : ${recentOrder.orderItems}">
+            <p th:text="${item.productName}"></p>
+            <p>Quantity: <span th:text="${item.quantity}"></span></p>
+            <p>Unit Price: <span th:text="${item.unitPrice}"></span></p>
+        </li>
+    </ul>
 </div>
-<div th:unless="${session.order != null}">
-    <h2>No recent order found.</h2>
+<div th:unless="${recentOrder != null}">
+    <p>No recent order found.</p>
+    <a th:href="@{/}">Return to Home</a>
 </div>
-<a href="/">Return to Home</a>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>

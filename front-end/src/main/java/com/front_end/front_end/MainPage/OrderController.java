@@ -64,11 +64,16 @@ public class OrderController {
                 .bodyToMono(Order.class)
                 .block();
 
+        request.getSession().setAttribute("recentOrder", createdOrder);
+
         return "redirect:/orderPage";
     }
 
     @GetMapping("/orderPage")
     public String orderPage(HttpServletRequest request, Model model) {
+
+        Order recentOrder = (Order) request.getSession().getAttribute("recentOrder");
+        model.addAttribute("recentOrder", recentOrder);
 
         return "orderConfirmation";
     }

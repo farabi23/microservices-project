@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cart page</title>
@@ -9,32 +9,32 @@
 <div th:replace="fragments/navbar :: navbar"></div>
 
 <h3>Your cart</h3>
-<div th:object="${cart}"
->
+<div th:object="${cart}">
     <ul>
-        <li th:each="item : ${cart.getItems()}" >
-
-            <p th:text="${item.getProductName()}" ></p>
-            <p th:text="${item.getQuantity()}" ></p>
-            <p th:text="${item.getUnitPrice()}" ></p>
-
+        <li th:each="item : ${cart.getItems()}">
+            <p th:text="${item.getProductName()}"></p>
+            <p>Quantity: <span th:text="${item.getQuantity()}"></span></p>
+            <p>Unit Price: <span th:text="${item.getUnitPrice()}"></span></p>
             <form th:action="@{/cart/delete}" method="post" style="display:inline;">
                 <input type="hidden" name="itemId" th:value="${item.getId()}"/>
                 <button type="submit" class="text-red-500 hover:text-red-700">❌ Remove</button>
             </form>
-
         </li>
     </ul>
 
-    <p th:text="${cart.getTotalItems()}"></p>
-    <p th:text="${cart.getTotalPrice()}"></p>
+    <p>Total Items: <span th:text="${cart.getTotalItems()}"></span></p>
+    <p>Total Price: <span th:text="${cart.getTotalPrice()}"></span></p>
 </div>
 
 <div>
-    <form th:action="@{/cart/clear}" method="post">
+    <form th:action="@{/cart/clear}" method="post" style="display:inline; margin-right: 1rem;">
         <button type="submit" class="text-red-500 hover:text-red-700">Clear cart</button>
     </form>
 
+    <!-- New form for placing the order -->
+    <form th:action="@{/createOrder}" method="post" style="display:inline;">
+        <button type="submit" class="text-green-500 hover:text-green-700">Place Order</button>
+    </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
