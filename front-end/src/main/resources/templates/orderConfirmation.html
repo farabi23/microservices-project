@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order confirmation</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div th:if="${session.order != null}">
+    <h2>Order Placed Successfully!</h2>
+    <p>Order ID: <span th:text="${session.order.id}"></span></p>
+    <p>Total Amount: <span th:text="${session.order.totalAmount}"></span></p>
+    <p>Status: <span th:text="${session.order.status}"></span></p>
+    <!-- You can also list order items here -->
+</div>
+<div th:unless="${session.order != null}">
+    <h2>No recent order found.</h2>
+</div>
+<a href="/">Return to Home</a>
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+</body>
+</html>
