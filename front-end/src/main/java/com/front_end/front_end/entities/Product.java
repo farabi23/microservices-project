@@ -14,16 +14,19 @@ public class Product {
 
     private Category category;
 
+    private String imageUrl;
+
     public Product(){
 
     }
 
-    public Product(long id, String name, String description, BigDecimal price, Category category) {
+    public Product(long id, String name, String description, BigDecimal price, Category category, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.imageUrl = imageUrl;
     }
 
     public long getId() {
@@ -64,5 +67,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

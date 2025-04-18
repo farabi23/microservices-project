@@ -10,6 +10,76 @@
 <div th:replace="fragments/navbar :: navbar"></div>
 
 
+
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Loop over products -->
+    <div th:each="product : ${products}"
+         class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <!-- Product image (bind your imageUrl here) -->
+        <a href="#" class="block">
+            <img class="p-8 rounded-t-lg"
+                 th:src="${product.getImageUrl()}"
+                 alt="Image of [[${product.name}]]" />
+        </a>
+
+        <div class="px-5 pb-5">
+            <!-- Product name -->
+            <a href="#" class="block">
+                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
+                    th:text="${product.name}">Product Name</h5>
+            </a>
+
+            <!-- Optional description -->
+            <p class="text-gray-500 text-sm mb-3" th:text="${product.description}">Product description…</p>
+
+            <!-- Rating placeholder (you can drop or make dynamic later) -->
+            <div class="flex items-center mt-2.5 mb-5">
+                <div class="flex items-center space-x-1 rtl:space-x-reverse">
+                    <!-- star icons… -->
+                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
+                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
+                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
+                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
+                    <svg class="w-4 h-4 text-gray-200"       fill="currentColor" viewBox="0 0 22 20">…</svg>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm ms-3">5.0</span>
+            </div>
+
+            <!-- Price and Add to Cart -->
+            <div class="flex items-center justify-between">
+        <span class="text-3xl font-bold text-gray-900 dark:text-white">
+          $<span th:text="${product.price}">0.00</span>
+        </span>
+
+                <form class="inline" th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="productId"   th:value="${product.id}" />
+                    <input type="hidden" name="productName"  th:value="${product.name}" />
+                    <input type="hidden" name="unitPrice"    th:value="${product.price}" />
+                    <input type="number" name="quantity" value="1" min="1"
+                           class="w-16 text-center border rounded" />
+
+                    <button type="button"
+                            onclick="addToCart(this)"
+                            th:data-name="${product.name}"
+                            th:data-price="${product.price}"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
+                         focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                        Add to cart
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<h1>------------</h1>
+<br>
+<br>
+
+
 <ul>
     <li th:each="product : ${products}">
         <strong th:text="${product.getName()}"></strong>
