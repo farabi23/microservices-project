@@ -34,17 +34,17 @@
             <p class="text-gray-500 text-sm mb-3" th:text="${product.description}">Product description…</p>
 
             <!-- Rating placeholder (you can drop or make dynamic later) -->
-            <div class="flex items-center mt-2.5 mb-5">
-                <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                    <!-- star icons… -->
-                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
-                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
-                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
-                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>
-                    <svg class="w-4 h-4 text-gray-200"       fill="currentColor" viewBox="0 0 22 20">…</svg>
-                </div>
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm ms-3">5.0</span>
-            </div>
+<!--            <div class="flex items-center mt-2.5 mb-5">-->
+<!--                <div class="flex items-center space-x-1 rtl:space-x-reverse">-->
+<!--                    &lt;!&ndash; star icons… &ndash;&gt;-->
+<!--                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>-->
+<!--                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>-->
+<!--                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>-->
+<!--                    <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 22 20">…</svg>-->
+<!--                    <svg class="w-4 h-4 text-gray-200"       fill="currentColor" viewBox="0 0 22 20">…</svg>-->
+<!--                </div>-->
+<!--                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm ms-3">5.0</span>-->
+<!--            </div>-->
 
             <!-- Price and Add to Cart -->
             <div class="flex items-center justify-between">
@@ -74,34 +74,34 @@
 </div>
 </div>
 
-<br>
-<br>
-<h1>------------</h1>
-<br>
-<br>
+<!--<br>-->
+<!--<br>-->
+<!--<h1>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</h1>-->
+<!--<br>-->
+<!--<br>-->
 
 
-<ul>
-    <li th:each="product : ${products}">
-        <strong th:text="${product.getName()}"></strong>
-        <span th:text="${product.getDescription()}"></span>
-        <br>
-        <strong th:text="${product.getPrice()}"></strong>
-        <span th:text="${product.getCategory().getName()}"></span>
+<!--<ul>-->
+<!--    <li th:each="product : ${products}">-->
+<!--        <strong th:text="${product.getName()}"></strong>-->
+<!--        <span th:text="${product.getDescription()}"></span>-->
+<!--        <br>-->
+<!--        <strong th:text="${product.getPrice()}"></strong>-->
+<!--        <span th:text="${product.getCategory().getName()}"></span>-->
 
-        <form >
-            <input type="hidden" name="productId" th:value="${product.getId()}">
-            <input type="hidden" name="productName" th:value="${product.getName()}">
-            <input type="hidden" name="unitPrice" th:value="${product.getPrice()}">
-            <input type="number" name="quantity" value="1" min="1" style="width: 50px;">
-            <button onclick="addToCart(this)"
-                    th:data-name="${product.getName()}"
-                    th:data-price="${product.getPrice()}"
-                    class="add-to-cart"
-                    type="button">Add to Cart</button>
-        </form>
-    </li>
-</ul>
+<!--        <form >-->
+<!--            <input type="hidden" name="productId" th:value="${product.getId()}">-->
+<!--            <input type="hidden" name="productName" th:value="${product.getName()}">-->
+<!--            <input type="hidden" name="unitPrice" th:value="${product.getPrice()}">-->
+<!--            <input type="number" name="quantity" value="1" min="1" style="width: 50px;">-->
+<!--            <button onclick="addToCart(this)"-->
+<!--                    th:data-name="${product.getName()}"-->
+<!--                    th:data-price="${product.getPrice()}"-->
+<!--                    class="add-to-cart"-->
+<!--                    type="button">Add to Cart</button>-->
+<!--        </form>-->
+<!--    </li>-->
+<!--</ul>-->
 
 <script>
     function addToCart(button) {
