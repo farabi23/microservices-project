@@ -5,29 +5,51 @@
     <title>Order Confirmation</title>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
-<body>
+<body class="bg-gray-100 text-gray-900">
+
+<!-- navbar -->
 <div th:replace="fragments/navbar :: navbar"></div>
 
-<h2>Order Confirmation</h2>
+<main class="flex flex-col items-center justify-center min-h-screen p-6">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl text-center">
 
-<div th:if="${recentOrder != null}">
-    <p>Order ID: <span th:text="${recentOrder.id}"></span></p>
-    <p>Order Date: <span th:text="${recentOrder.orderDateTime}"></span></p>
-    <p>Total Amount: <span th:text="${recentOrder.totalAmount}"></span></p>
+        <!-- Success Icon + Title -->
+        <div class="flex flex-col items-center mb-6">
+            <svg class="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2l4 -4m5 2a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
+            </svg>
+            <h1 class="text-3xl font-bold text-green-600">Your order has been placed!</h1>
+        </div>
 
-    <h3>Items:</h3>
-    <ul>
-        <li th:each="item : ${recentOrder.orderItems}">
-            <p th:text="${item.productName}"></p>
-            <p>Quantity: <span th:text="${item.quantity}"></span></p>
-            <p>Unit Price: <span th:text="${item.unitPrice}"></span></p>
-        </li>
-    </ul>
-</div>
-<div th:unless="${recentOrder != null}">
-    <p>No recent order found.</p>
-    <a th:href="@{/}">Return to Home</a>
-</div>
+        <div th:if="${recentOrder != null}">
+            <div class="text-left space-y-4">
+                <p><strong>Order ID:</strong> <span th:text="${recentOrder.id}"></span></p>
+                <p><strong>Order Date:</strong>
+                    <span th:text="${#temporals.format(recentOrder.orderDateTime, 'yyyy-MM-dd')}"></span>
+                </p>
+
+                <p><strong>Total Amount:</strong> $<span th:text="${recentOrder.totalAmount}"></span></p>
+
+                <h2 class="text-2xl font-semibold mt-8 mb-4">Items:</h2>
+
+                <ul class="space-y-4">
+                    <li th:each="item : ${recentOrder.orderItems}" class="p-4 bg-gray-50 rounded-md">
+                        <p class="font-medium" th:text="${item.productName}"></p>
+                        <p class="text-sm text-gray-600">Quantity: <span th:text="${item.quantity}"></span></p>
+                        <p class="text-sm text-gray-600">Unit Price: $<span th:text="${item.unitPrice}"></span></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div th:unless="${recentOrder != null}" class="mt-6">
+            <p class="text-red-500 mb-4">No recent order found.</p>
+            <a th:href="@{ / }" class="text-blue-600 hover:underline">Return to Home</a>
+        </div>
+    </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>

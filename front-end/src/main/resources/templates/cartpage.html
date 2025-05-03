@@ -3,39 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart page</title>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet"/>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-900">
+
+<!-- navbar -->
 <div th:replace="fragments/navbar :: navbar"></div>
 
-<h3>Your cart</h3>
-<div th:object="${cart}">
-    <ul>
-        <li th:each="item : ${cart.getItems()}">
-            <p th:text="${item.getProductName()}"></p>
-            <p>Quantity: <span th:text="${item.getQuantity()}"></span></p>
-            <p>Unit Price: <span th:text="${item.getUnitPrice()}"></span></p>
-            <form th:action="@{/cart/delete}" method="post" style="display:inline;">
+<main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Your Cart</h1>
+
+    <!-- Items list (VERTICAL STACK) -->
+    <div class="flex flex-col space-y-6" style="width: 50%; margin: auto">
+        <div th:each="item : ${cart.getItems()}"
+             class="bg-white rounded-lg shadow p-5">
+            <div class="mb-4">
+                <h2 class="text-xl font-semibold" th:text="${item.getProductName()}">Product Name</h2>
+                <p class="text-sm text-gray-600">Quantity:
+                    <span th:text="${item.getQuantity()}">1</span>
+                </p>
+                <p class="text-sm text-gray-600">Unit Price:
+                    <span th:text="${item.getUnitPrice()}">$0.00</span>
+                </p>
+            </div>
+            <form th:action="@{/cart/delete}" method="post">
                 <input type="hidden" name="itemId" th:value="${item.getId()}"/>
-                <button type="submit" class="text-red-500 hover:text-red-700">❌ Remove</button>
+                <button type="submit"
+                        class="w-full inline-flex justify-center items-center px-4 py-2 text-sm font-medium
+                         text-white bg-red-600 hover:bg-red-700 rounded-md focus:ring-2 focus:ring-red-500">
+                    ❌ Remove
+                </button>
             </form>
-        </li>
-    </ul>
+        </div>
+    </div>
 
-    <p>Total Items: <span th:text="${cart.getTotalItems()}"></span></p>
-    <p>Total Price: <span th:text="${cart.getTotalPrice()}"></span></p>
-</div>
-
-<div>
-    <form th:action="@{/cart/clear}" method="post" style="display:inline; margin-right: 1rem;">
-        <button type="submit" class="text-red-500 hover:text-red-700">Clear cart</button>
-    </form>
-
-    <!-- New form for placing the order -->
-    <form th:action="@{/createOrder}" method="post" style="display:inline;">
-        <button type="submit" class="text-green-500 hover:text-green-700">Place Order</button>
-    </form>
-</div>
+    <br>
+    <!-- Summary & actions -->
+    <div class="mt-8 bg-white rounded-lg shadow p-6 flex flex-col md:flex-row items-center justify-between"
+         style="width: 50%; margin: auto">
+        <div class="mb-4 md:mb-0">
+            <p class="text-lg"><span class="font-semibold">Total Items:</span>
+                <span th:text="${cart.getTotalItems()}">0</span>
+            </p>
+            <p class="text-lg"><span class="font-semibold">Total Price:</span>
+                <span th:text="${cart.getTotalPrice()}">$0.00</span>
+            </p>
+        </div>
+        <div class="flex space-x-4">
+            <form th:action="@{/cart/clear}" method="post">
+                <button type="submit"
+                        class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium
+                         text-white bg-red-500 hover:bg-red-600 rounded-md focus:ring-2 focus:ring-red-400">
+                    Clear Cart
+                </button>
+            </form>
+            <form th:action="@{/createOrder}" method="post">
+                <button type="submit"
+                        class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium
+                         text-white bg-green-600 hover:bg-green-700 rounded-md focus:ring-2 focus:ring-green-400">
+                    Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
